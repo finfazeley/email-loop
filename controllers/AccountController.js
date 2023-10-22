@@ -76,17 +76,17 @@ exports.postReset = async (req, res, next) => {
 sendEmail = async (email, subject, text) => {
     try {
       var transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
+        host: "gmail",
+        port: process.env.PORT || 3030,
         auth: {
-          user: "fff0b9d2a5de58",
-          pass: "a1d82c487dd831"
+          user: "nwen304.tradecars@gmail.com",
+          pass: "nwen304NWEN304"
         }
       });
 
        var mailOptions = {
             from: "admin@tradecars.onrender.com",
-            to: email,
+            to: "finley.sullivan@gmail.com",
             subject: subject,
             text: text,
         };
