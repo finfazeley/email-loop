@@ -1,10 +1,8 @@
 const User = require('../models/User');
-const CarListing = require('../models/CarListing');
-const findUser =  require('../utils/findUserById');
 const navPages = require('../utils/navPages');
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
-
+const bcrypt = require('bcryptjs');
 
 exports.getAccount = (req, res, next) => {
     const userID = req.user;
@@ -12,7 +10,7 @@ exports.getAccount = (req, res, next) => {
     if(!userID || userID === undefined) {
       login = false;
     }
-    //console.log(login);
+    //console.log(login)
     
     //const listings = await ListingController.getUserListings();
     getUser(userID).then(async user => {
@@ -66,10 +64,79 @@ exports.postReset = async (req, res, next) => {
 
   // generate token for user and send email
   const token = jwt.sign({ userId: fullUser.userID }, process.env.JWT_SECRET, { expiresIn: '5m' });
-  await sendEmail(fullUser.email, "Password reset", token);
+
+  const link = `https://tradecars.onrender.com/changePassword/${req.user}/${token}`;
+
+
+  await sendEmail(fullUser.email, "Password Reset", link);
 
   // return to homepage
   return res.redirect('/');
+
+}
+
+exports.confirmPassword = async (req, res, next) => {
+  //console.log(req);
+
+  // Check user is logged in
+  if(!req.user || req.user === undefined) {
+    res.status(400).json({ message: "You are not logged in" });
+    return;
+  }
+  
+  if (req.body.password !== req.body.confirmPassword){
+    res.status(400).json({ message: "Passwords do not match" });
+    return;
+  }
+
+  // if they made it here they should be safe, so update the password
+
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+  console.log(await User.updateOne(
+    { _id: req.user },
+    { $set: { password: hashedPassword } },
+));
+
+
+  // return to homepage
+  return res.redirect('/');
+
+}
+
+exports.changePassword = async (req, res, next) => {
+  //console.log(req);
+
+  // Check user is logged in
+  if(!req.user || req.user === undefined) {
+    res.status(400).json({ message: "You are not logged in" });
+    return;
+    // return res.redirect('/');
+  }
+
+  // perform checks to make sure user is allowed to change the password
+  const uID = req.params.userId;
+  const tok = req.params.token;
+
+  try{
+    const decoded = await jwt.verify(tok,process.env.JWT_SECRET);
+    console.log(decoded);
+
+    res.render('changePassword', {
+      navPages: navPages,
+      activeUrl: '/changePassword',
+      login: true,
+      user: req.user.username,
+      userID: req.user.userID
+    });
+
+  }catch(e){
+    console.log(e);
+    res.status(400).json({ message: "Invalid token" });
+
+  }
+  
+  
 
 }
 
@@ -88,7 +155,7 @@ sendEmail = async (email, subject, text) => {
 
        var mailOptions = {
             from: "nwen.tradecars@zohomail.com.au",
-            to: "nwen.tradecars@zohomail.com.au",
+            to: "nwen.tradecars@zohomail.com.au", // PUT EMAIL HERE
             subject: subject,
             text: text,
         };
@@ -105,8 +172,6 @@ sendEmail = async (email, subject, text) => {
         console.log(error, "email not sent");
     }
 };
-  
-
 
 getUser = async(userID) => {
     if (!userID || userID === undefined) {return null;}
