@@ -1,0 +1,45 @@
+<div class="header">
+  <div class="nav-wrapper">
+    <a class="title" href="/">Trade Cars</a>
+    <ul id="nav">
+      <% for(var page of navPages) { %>
+        <% if(page.url === activeUrl) { %>
+          <li><a class="active" href=<%= page.url %>><%= page.name %></a></li>
+        <% } else { %>
+          <% if(login && page.onLogIn) { %>
+            <% if(page.url === '/logout') { %>
+              <li class="login">Logged in as: <%= user %>  </li>
+            <% } %>
+            <li><a href=<%= page.url %>><%= page.name %></a></li>
+          <% } else if (!login && page.onLogOut) { %>
+            <li><a href=<%= page.url %>><%= page.name %></a></li>
+          <% }} %>
+      <% } %>
+    </ul>
+  </div>
+
+
+  <!-- This is the cookie consent banner -->
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.css" />
+  <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.1/cookieconsent.min.js"></script>
+  <script>
+  window.addEventListener("load", function(){
+  window.cookieconsent.initialise({
+    "palette": {
+      "popup": {
+        "background": "#edeff5",
+        "text": "#838391"
+      },
+      "button": {
+        "background": "#4b81e8"
+      }
+    },
+    "content": {
+      "message": "This website uses cookies to ensure you get the best experience on our website.",
+      "dismiss": "Got it!",
+      "link": "Learn more"
+     }
+  });
+  });
+  </script>
+</div>
