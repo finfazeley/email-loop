@@ -77,7 +77,9 @@ exports.postReset = async (req, res, next) => {
 sendEmail = async (email, subject, text) => {
     try {
       var transport = nodemailer.createTransport({
-        host: 'zoho',
+        host: "smtp.zoho.com.au",
+        secure: true,
+        port: 465,
         auth: {
           user: "nwen.tradecars@zohomail.com.au",
           pass: "nwen304NWEN304"
@@ -91,7 +93,7 @@ sendEmail = async (email, subject, text) => {
             text: text,
         };
 
-        transport.sendMail(mailOptions, (error, info) => {
+        await transport.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
