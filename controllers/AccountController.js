@@ -5,6 +5,7 @@ const navPages = require('../utils/navPages');
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
 
+
 exports.getAccount = (req, res, next) => {
     const userID = req.user;
     var login = true;
@@ -76,17 +77,16 @@ exports.postReset = async (req, res, next) => {
 sendEmail = async (email, subject, text) => {
     try {
       var transport = nodemailer.createTransport({
-        host: "gmail",
-        port: process.env.PORT || 3030,
+        host: 'zoho',
         auth: {
-          user: "nwen304.tradecars@gmail.com",
+          user: "nwen.tradecars@zohomail.com.au",
           pass: "nwen304NWEN304"
         }
       });
 
        var mailOptions = {
-            from: "admin@tradecars.onrender.com",
-            to: "finley.sullivan@gmail.com",
+            from: "nwen.tradecars@zohomail.com.au",
+            to: "nwen.tradecars@zohomail.com.au",
             subject: subject,
             text: text,
         };
