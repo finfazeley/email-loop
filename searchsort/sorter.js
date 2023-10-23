@@ -1,22 +1,28 @@
 const CarListing = require("./schemas/CarListing");
 
 exports.sortByYear = async(req, res) => {
-  console.log(CarListing.find());
-  const order = (req.query.order === "asc") ? 1 : -1;
-  console.log(order);
-  var listings = await CarListing.find().cursor().toArray();
+  try{
+    const order = (req.query.order === "asc") ? 1 : -1;
 
-  listings.sort((a, b) => {
-    if (a.year > b.year) {
-      return 1*order;
-    }
-    return -1*order;
-  });
-  var newListings = buildListings(listings);
-  res.send(JSON.stringify(newListings));
+    var listings = await CarListing.find().cursor().toArray();
+  
+    listings.sort((a, b) => {
+      if (a.year > b.year) {
+        return 1*order;
+      }
+      return -1*order;
+    });
+    var newListings = buildListings(listings);
+    res.send(JSON.stringify(newListings));
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+    return res.redirect('/');
+  }
 }
 
 exports.sortByPrice = async(req, res) => {
+  try{
+
   const order = (req.query.order === "asc") ? 1 : -1;
   var listings = await CarListing.find().cursor().toArray();
   listings.sort((a, b) => {
@@ -27,9 +33,15 @@ exports.sortByPrice = async(req, res) => {
   });
   var newListings = buildListings(listings);
   res.send(JSON.stringify(newListings));
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+    return res.redirect('/');
+  }
 }
 
 exports.sortByMileage = async(req, res) => {
+  try{
+
   const order = (req.query.order === "asc") ? 1 : -1;
   var listings = await CarListing.find().cursor().toArray();
   listings.sort((a, b) => {
@@ -40,6 +52,10 @@ exports.sortByMileage = async(req, res) => {
   });
   var newListings = buildListings(listings);
   res.send(JSON.stringify(newListings));
+} catch (err) {
+  res.status(500).json({ message: err.message });
+  return res.redirect('/');
+}
 }
 
 const buildListings = (listings) => {
