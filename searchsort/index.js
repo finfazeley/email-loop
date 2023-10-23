@@ -11,6 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api', routes);
+app.use(express.urlencoded({ extended:false }));
 
 const PORT = 5001;
 
