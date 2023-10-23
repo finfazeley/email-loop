@@ -1,8 +1,6 @@
 # Node
 node_modules/
-.env
+node_modules
 
 .vscode
 
-mongodb_common_key.pem
-node_modules
