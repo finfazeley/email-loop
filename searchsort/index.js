@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api', routes);
 
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
 // Connect to MongoDB
 mongoose.connect(new String(process.env.MONGO_DB + process.env.MONGO_CERT).toString(),
