@@ -1,4 +1,4 @@
-const CarListing = require("../src/models/CarListing");
+const CarListing = require("../models/CarListing");
 
 exports.sortByYear = async(req, res) => {
   console.log(CarListing.find( ));
