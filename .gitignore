@@ -5,3 +5,4 @@ node_modules/
 .vscode
 
 mongodb_common_key.pem
+node_modules
