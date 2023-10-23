@@ -1,8 +1,16 @@
 const CarListing = require("./schemas/CarListing");
 
 exports.sortByYear = async(req, res) => {
+  console.log(CarListing.find());
   const order = (req.query.order === "asc") ? 1 : -1;
-  await CarListing.find().cursor().toArray().then((listings) => {
+  console.log(order);
+
+    const cursor = CarListing.find().cursor();
+    const listings = [];
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+        listings.push(doc);
+    }
+
     listings.sort((a, b) => {
       if (a.year > b.year) {
         return 1*order;
@@ -11,7 +19,6 @@ exports.sortByYear = async(req, res) => {
     });
     var newListings = buildListings(listings);
     res.send(JSON.stringify(newListings));
-  });
 }
 
 exports.sortByPrice = async(req, res) => {
