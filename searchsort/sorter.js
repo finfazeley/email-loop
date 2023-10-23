@@ -1,9 +1,11 @@
 const CarListing = require("./schemas/CarListing");
 
 exports.sortByYear = async(req, res) => {
-  console.log(req);
+  // console.log(req);
   const order = (req.query.order === "asc") ? 1 : -1;
+  console.log(order);
   var listings = await CarListing.find().cursor().toArray();
+
   listings.sort((a, b) => {
     if (a.year > b.year) {
       return 1*order;
