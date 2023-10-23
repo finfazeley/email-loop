@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const CarListing = require('./schemas/CarListing');
+// const CarListing = require('./schemas/CarListing');
 const Sorter = require('./sorter');
 
 // Sorted search
